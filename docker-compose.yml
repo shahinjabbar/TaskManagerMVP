@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  taskmanagerdb:
+    container_name: taskmanagerdb
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=RSNkHXW1
+
+  taskmanager.api:
+    container_name: taskmanagerapi
+    image: ${DOCKER_REGISTRY-}taskmanagerapi
+    build:
+      context: .
+      dockerfile: TaskManager.Api/Dockerfile
+    ports:
+     - 8001:80
+    depends_on: 
+      - taskmanagerdb
